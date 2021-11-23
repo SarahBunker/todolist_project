@@ -1,5 +1,6 @@
 require 'bundler/setup'
 require 'minitest/autorun'
+require 'date'
 require "minitest/reporters"
 Minitest::Reporters.use!
 
@@ -230,6 +231,28 @@ class TodoListTest < MiniTest::Test
   def test_find_by_title
     assert_equal(todo1, list.find_by_title("Buy milk"))
     assert_equal(nil,   list.find_by_title("a cow"))
+  end
+  
+  def test_no_due_date
+    assert_nil(@todo1.due_date)
+  end
+
+  def test_due_date
+    due_date = Date.today + 3
+    @todo2.due_date = due_date
+    assert_equal(due_date, @todo2.due_date)
+  end
+  
+  def test_to_s_with_due_date
+    @todo2.due_date = Date.civil(2017, 4, 15)
+    output = <<-OUTPUT.chomp.gsub(/^\s+/, '')
+    ---- Today's Todos ----
+    [ ] Buy milk
+    [ ] Clean room (Due: Saturday April 15)
+    [ ] Go to gym
+    OUTPUT
+
+    assert_equal(output, @list.to_s)
   end
   
   private
