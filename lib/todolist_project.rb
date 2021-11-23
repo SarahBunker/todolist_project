@@ -1,13 +1,14 @@
 require 'bundler/setup'
 require 'stamp'
 
+#  todo items
 class Todo
-  DONE_MARKER = 'X'
-  UNDONE_MARKER = ' '
+  DONE_MARKER = 'X'.freeze
+  UNDONE_MARKER = ' '.freeze
 
   attr_accessor :title, :description, :done, :due_date
 
-  def initialize(title, description='')
+  def initialize(title, description = '')
     @title = title
     @description = description
     @done = false
@@ -31,13 +32,14 @@ class Todo
     result
   end
 
-  def ==(otherTodo)
-    title == otherTodo.title &&
-      description == otherTodo.description &&
-      done == otherTodo.done
+  def ==(other)
+    title == other.title &&
+      description == other.description &&
+      done == other.done
   end
 end
 
+# TodoList items
 class TodoList
   attr_accessor :title
 
@@ -47,104 +49,104 @@ class TodoList
   end
 
   def add(todo)
-    raise TypeError.new("Can only add Todo objects") unless todo.instance_of? Todo
+    raise TypeError.new('Can only add Todo objects'), 'Can only add Todo objects' unless todo.instance_of? Todo
+
     todos << todo
   end
-  
+
   def <<(todo)
     add(todo)
   end
-  
+
   def size
     todos.size
   end
-  
+
   def first
     todos.first
   end
-  
+
   def last
     todos.last
   end
-  
+
   def to_a
     todos.clone
   end
-  
+
   def done?
-    todos.all?{|todo| todo.done?}
+    todos.all?(&:done?)
   end
-  
-  def item_at(i)
-    todos.fetch(i)
+
+  def item_at(idx)
+    todos.fetch(idx)
   end
-  
-  def mark_done_at(i)
-    item_at(i).done!
+
+  def mark_done_at(idx)
+    item_at(idx).done!
   end
-  
-  def mark_undone_at(i)
-    item_at(i).undone!
+
+  def mark_undone_at(idx)
+    item_at(idx).undone!
   end
-  
+
   def done!
-    todos.each_index{|i| mark_done_at(i)}
+    todos.each_index { |idx| mark_done_at(idx) }
   end
-  
+
   def shift
     todos.shift
   end
-  
+
   def pop
     todos.pop
   end
-  
-  def remove_at(i)
-    # todos.delete(item_at(i))
-    item_at(i)
-    todos.delete_at(i)
+
+  def remove_at(idx)
+    todos.delete_at(idx)
   end
-  
+
   def to_s
     text = "---- #{title} ----\n"
     text << todos.map(&:to_s).join("\n")
   end
-  
+
   def each
-    todos.each{|item| yield(item) }
+    todos.each { |item| yield(item) }
     self
   end
-  
+
   def select
     list = TodoList.new(title)
-    each{|item| list << item if yield(item)}
+    each { |item| list << item if yield(item) }
     list
   end
-  
+
   def find_by_title(title)
-    select{|item| item.title.downcase == title.downcase}.first
+    select { |item| item.title.downcase == title.downcase }.first
   end
-  
+
   def all_done
-    select{|item| item.done?}
+    select(&:done?)
   end
-  
+
   def all_not_done
-    select{|item| !item.done?}
+    select { |item| !item.done? }
   end
-  
+
   def mark_done(title)
     find_by_title(title) && find_by_title(title).done!
   end
-  
+
   def mark_all_done
     done!
   end
-  
+
   def mark_all_undone
-    each{|item| item.undone!}
+    each(&:done?)
   end
-  
+
   private
+
   attr_reader :todos
 end

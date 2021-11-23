@@ -236,7 +236,7 @@ class TodoListTest < MiniTest::Test
   
   def test_find_by_title
     assert_equal(todo1, list.find_by_title("Buy milk"))
-    assert_equal(nil,   list.find_by_title("a cow"))
+    assert_nil(list.find_by_title("a cow"))
   end
   
   def test_no_due_date
