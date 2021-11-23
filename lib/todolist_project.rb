@@ -1,10 +1,6 @@
 require 'bundler/setup'
 require 'stamp'
 
-# This class represents a todo item and its associated
-# data: name and description. There's also a "done"
-# flag to show whether this todo item is done.
-
 class Todo
   DONE_MARKER = 'X'
   UNDONE_MARKER = ' '
@@ -29,7 +25,7 @@ class Todo
     self.done = false
   end
 
-  def to_s # replaces original #to_s method
+  def to_s
     result = "[#{done? ? DONE_MARKER : UNDONE_MARKER}] #{title}"
     result += due_date.stamp(' (Due: Friday January 6)') if due_date
     result
@@ -41,11 +37,6 @@ class Todo
       done == otherTodo.done
   end
 end
-
-
-# This class represents a collection of Todo objects.
-# You can perform typical collection-oriented actions
-# on a TodoList object, including iteration and selection.
 
 class TodoList
   attr_accessor :title

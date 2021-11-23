@@ -144,6 +144,12 @@ class TodoListTest < MiniTest::Test
     assert_equal(todos2, list.to_a)
   end
   
+  def test_remove_at
+    list.add(todo1)
+    list.remove_at(0)
+    assert_equal([todo2,todo3,todo1],list.to_a)
+  end
+  
   def test_to_s
     output = <<~OUTPUT.chomp
     ---- Today's Todos ----
