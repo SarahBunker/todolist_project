@@ -150,3 +150,20 @@ class TodoList
 
   attr_reader :todos
 end
+
+paper = Todo.new("toilet paper")
+pin = Todo.new("pineapple")
+milk = Todo.new("milk")
+eggs = Todo.new("eggs")
+list = [paper,pin,milk,eggs]
+
+grocery_list = TodoList.new("Grocery List")
+list.each {|todo| grocery_list.add(todo)}
+
+puts grocery_list
+
+grocery_list.mark_done_at(1)
+
+puts grocery_list
+
+puts grocery_list.all_not_done
